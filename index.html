@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>双向数据绑定——购物车</title>
+    <script src="../../node_modules/angular/angular.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+        .logo,.logo1,.date{text-align:center;font-size:20px;padding:20px 0;}
+        .table tr th,.table tr td{text-align:center;font-size:18px;}
+    </style>
+</head>
+<body ng-app="mycar">
+   <div ng-controller="car">
+       <div class="logo" ng-show="data.length>0">Angular——购物车</div>
+       <div class="logo1" ng-show="data.length==0">购物车空空如也......</div>
+       <div class="date">
+           {{date|date:"yyyy-MM-dd hh:mm:ss"}} <!--日期-->
+       </div>
+       <div class="input-group" ng-show="data.length>0"><!--搜索框-->
+           <span class="input-group-addon"></span>
+           <input type="text" class="form-control" placeholder="搜索:例如:帽子" ng-model="search">
+       </div>
+
+       <table class="table table-bordered" ng-show="data.length>0"  >
+           <tr>
+               <th>商品名称</th>
+               <th>
+                   商品价格
+                   <div ng-class="type" ng-click="order()">
+                       <span class="caret"></span>
+                   </div>
+               </th>
+               <th>商品数量</th>
+               <th>商品总价</th>
+               <th>操作</th>
+           </tr>
+           <tr ng-repeat="item in data | filter:{name:search} | orderBy:prize"> <!--循环;搜索;排序-->
+                <td>{{item.name}}</td>
+                <td>{{item.prize}}</td>
+                <td>
+                    <!--bootstrap组件 表单-->
+                    <div class="input-group" style="width:100px;margin:0 auto;">
+                        <div class="input-group-addon" ng-click=jian(item.id)><</div>
+                        <input type="text" class="form-control" ng-model=item.nums>
+                        <div class="input-group-addon" ng-click=add(item.id)>></div>
+                    </div>
+                </td>
+                <td>
+                    {{item.prize*item.nums|currency:"￥":"2"}}
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger" ng-click=del(item.id)>删除</button>
+                </td>
+           </tr>
+           <tr>
+                <td>总价格:</td>
+                <td>{{getPrize()|currency:"￥":"2"}}</td> <!--调用getPrize();过滤:货币-->
+                <td>总数量:</td>
+                <td> {{getNum()}}</td>
+                <td>
+                    <button type="button" class="btn btn-danger " ng-click=clear()>清空购物车</button>
+                </td>
+           </tr>
+       </table>
+   </div>
+</body>
+<script>
+   angular.module("mycar",[]).controller("car",["$scope","$filter",function($scope,$filter){
+                $scope.type="";
+                $scope.prize="";
+                $scope.order=function(){
+                   if($scope.type==""){
+                        $scope.type="dropup"; //向上的箭头
+                        $scope.prize="-";
+                   }else{
+                       $scope.type="";
+                       $scope.prize="";
+                   }
+                };
+                $scope.date=new Date().getTime(); //当前日期时间
+                $scope.data=[
+                   {
+                     id:1,
+                     name:"鞋子",
+                     prize:"100",
+                     nums:"2"
+                   },
+                   {
+                       id:2,
+                       name:"上衣",
+                       prize:"200",
+                       nums:"1"
+                   },
+                   {
+                        id:1,
+                        name:"衬衣",
+                        prize:"120",
+                        nums:"1"
+                   },
+                   {
+                        id:3,
+                        name:"帽子",
+                        prize:"50",
+                        nums:"1"
+                    }
+                ];
+                $scope.getPrize=function(){
+                     var sumPrize=0;
+                     for(var i=0;i<$scope.data.length;i++){
+                       sumPrize+=$scope.data[i].nums*$scope.data[i].prize;
+                     }
+                     return sumPrize;
+                };
+                $scope.getNum=function(){
+                    var sumNum=0;
+                    angular.forEach($scope.data,function(obj,index){
+                        var nums=obj.nums;
+                        if(nums%1===0&&parseInt(nums)&&parseInt(nums)>0){
+                            sumNum+=nums*1;
+                        }else{
+                            obj.nums="";
+                        }
+                    });
+                    return sumNum;
+                };
+                $scope.del=function(id){
+                    for(var i=0;i<$scope.data.length;i++){
+                        if($scope.data[i].id==id){
+                            $scope.data.splice(i,1);
+                        }
+                    }
+                };
+                $scope.clear=function(){
+                    $scope.data=[];
+                };
+                $scope.jian=function(id){
+                    for(var i=0;i<$scope.data.length;i++){
+                        if($scope.data[i].id==id){
+                            $scope.data[i].nums--;
+                        }
+                    }
+                };
+                $scope.add=function(id){
+                    for(var i=0;i<$scope.data.length;i++){
+                        if($scope.data[i].id==id){
+                            $scope.data[i].nums++;
+                        }
+                    }
+                };
+   }]);
+</script>
+</html>

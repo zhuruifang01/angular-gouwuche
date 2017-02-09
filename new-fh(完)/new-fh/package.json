@@ -1,0 +1,24 @@
+{
+  "name": "new-fh",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "async": "^2.1.4",
+    "body-parser": "^1.15.2",
+    "cheerio": "^0.22.0",
+    "cookie-parser": "^1.4.3",
+    "cron": "^1.2.1",
+    "ejs": "^2.5.5",
+    "express": "^4.14.0",
+    "less": "^2.7.1",
+    "mysql": "^2.12.0",
+    "request": "^2.79.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

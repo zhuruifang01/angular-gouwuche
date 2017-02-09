@@ -1,0 +1,15 @@
+<header>
+    <div class="header-logo">
+        <i class="logo">新闻资讯</i>
+        <div class="search">
+            <i class="iconfont icon-search search-logo"></i>
+            <input type="text" name="search" value="搜索">
+        </div>
+    </div>
+    <nav id="nav">
+
+            <%for (var i=0;i<categorys.length;i++){%>
+                <a href="/list/<%=categorys[i].cid%>"><%=categorys[i].cname%></a>
+            <%}%>
+    </nav>
+</header>

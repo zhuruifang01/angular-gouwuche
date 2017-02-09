@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta content="telephone=no" name="format-detction">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/swiper.min.css">
+    <link rel="stylesheet" href="/static/css/animate.min.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/icon/iconfont.css">
+    <link rel="stylesheet" href="/static/css/icon1/iconfont.css">
+    <script src="/static/js/public.js"></script>
+    <script src="/static/js/jquery-3.1.0.js"></script>
+    <script src="/static/js/swiper.jquery.min.js"></script>
+    <script src="/static/js/index.js"></script>
+    <script src="/static/js/iscroll.js"></script>
+</head>
+<body>
+
+<%include header.html%>
+<section id="wrapper">
+    <div id="scroller">
+        <ul class="scroll-box">
+            <%for(var i=0;i<title2.length;i++){%>
+            <li>
+            <div class="content">
+                <a href="/show/<%=title2[i].id%>" class="title"><span><%=title2[i].atitle%></span></a>
+                <div class="copry">
+                    <!--<i class="hot">热</i>-->
+                    <!--<span class="source"></span>-->
+                    <!--<span class="comment">6025评论</span>-->
+                    <!--<span class="time">12分钟前</span>-->
+                    <!--<aside class="second-cate"></aside>-->
+                </div>
+            </div>
+                <div class="content-img">
+                    <img src="/static/img/<%=title2[i].aimg.split(";")[0]%>" alt="">
+                </div>
+            </li>
+            <%}%>
+
+            <%for(var j=0;j<title3.length;j++){%>
+            <li>
+                <div class="content">
+                    <a href="/show/<%=title3[j].id%>" class="title"><span><%=title3[j].atitle%></span></a>
+                    <div class="copry">
+                        <!--<i class="hot">热</i>-->
+                        <!--<span class="source"></span>-->
+                        <!--<span class="comment">6025评论</span>-->
+                        <!--<span class="time">12分钟前</span>-->
+                        <!--<aside class="second-cate"></aside>-->
+                    </div>
+                </div>
+                <div class="content-img">
+                    <img src="/static/img/<%=title3[j].aimg.split(";")[0]%>" alt="">
+                </div>
+            </li>
+            <%}%>
+
+            <%for(var k=0;k<title4.length;k++){%>
+            <li>
+                <div class="content">
+                    <a href="/show/<%=title4[k].id%>" class="title"><span><%=title4[k].atitle%></span></a>
+                    <div class="copry">
+                        <!--<i class="hot">热</i>-->
+                        <!--<span class="source"></span>-->
+                        <!--<span class="comment">6025评论</span>-->
+                        <!--<span class="time">12分钟前</span>-->
+                        <!--<aside class="second-cate"></aside>-->
+                    </div>
+                </div>
+                <div class="content-img">
+                    <img src="/static/img/<%=title4[k].aimg.split(";")[0]%>" alt="">
+                </div>
+            </li>
+            <%}%>
+
+            <%for(var l=0;l<title6.length;l++){%>
+            <li>
+                <div class="content">
+                    <a href="/show/<%=title6[l].id%>" class="title"><span><%=title6[l].atitle%></span></a>
+                    <div class="copry">
+                        <!--<i class="hot">热</i>-->
+                        <!--<span class="source"></span>-->
+                        <!--<span class="comment">6025评论</span>-->
+                        <!--<span class="time">12分钟前</span>-->
+                        <!--<aside class="second-cate"></aside>-->
+                    </div>
+                </div>
+                <div class="content-img">
+                    <img src="/static/img/<%=title6[l].aimg.split(";")[0]%>" alt="">
+                </div>
+            </li>
+            <%}%>
+        </ul>
+    </div>
+
+</section>
+
+<footer>
+    <div class="icon">
+        <a href="/" class="tt iconfont icon-shouye_shouye"></a>
+        首页
+    </div>
+    <div class="icon">
+        <a href="##" class="tt iconfont icon-recommend"></a>
+        推荐
+    </div>
+    <div class="icon">
+        <a href="/user/reg" class="tt iconfont icon-wode-copy-copy"></a>
+        我的
+    </div>
+</footer>
+</body>
+<script>
+
+    window.onload=function(){
+        resize(1334,"y");
+        myScroll=new IScroll("#wrapper",{
+            mouseWheel:true,
+            bounce:true,
+        });
+        myScroll.on("touchmove",function(e){
+            e.preventDefault();
+        });
+    };
+
+</script>
+</html>

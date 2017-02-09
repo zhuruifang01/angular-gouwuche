@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta content="telephone=no" name="format-detction">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/swiper.min.css">
+    <link rel="stylesheet" href="/static/css/animate.min.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/icon/iconfont.css">
+    <link rel="stylesheet" href="/static/css/icon1/iconfont.css">
+    <link rel="stylesheet" href="/static/css/list.css">
+    <script src="/static/js/public.js"></script>
+    <script src="/static/js/jquery-3.1.0.js"></script>
+    <script src="/static/js/swiper.jquery.min.js"></script>
+    <script src="/static/js/index.js"></script>
+    <script src="/static/js/iscroll.js"></script>
+</head>
+<body>
+<%include header.html%>
+<section id="wrapper">
+    <div id="scroller">
+        <div class="topele">下拉刷新.....</div>
+        <ul class="scroll-box">
+            <%for(var j=0;j<lists.length;j++){%>
+            <li>
+                <div class="content">
+                    <a href="/show/<%=lists[j].id%>" class="title"><span><%=lists[j].atitle%></span></a>
+                </div>
+                <div class="content-img">
+                    <img src="/static/img/<%=lists[j].aimg.split(";")[0]%>" alt="">
+                </div>
+            </li>
+            <%}%>
+        </ul>
+        <div class="downele">上拉刷新....</div>
+    </div>
+
+</section>
+
+<footer>
+    <div class="icon">
+        <a href="/" class="tt iconfont icon-shouye_shouye"></a>
+        首页
+    </div>
+    <div class="icon">
+        <a href="##" class="tt iconfont icon-recommend"></a>
+        推荐
+    </div>
+    <div class="icon">
+        <a href="/user/reg" class="tt iconfont icon-wode-copy-copy"></a>
+        我的
+    </div>
+</footer>
+<section class="shade"></section>
+<aside class="side-nav">
+    <h1>栏目</h1>
+    <ul>
+        <%for (var i=0;i<categorys.length;i++){%>
+        <li><a href="/list/<%=categorys[i].cid%>"><%=categorys[i].cname%></a></li>
+        <%}%>
+    </ul>
+</aside>
+</body>
+<script>
+
+    window.onload=function(){
+        resize(1334,"y");
+        var cid=location.pathname.slice(location.pathname.lastIndexOf("/")+1);
+        myScroll=new IScroll("#wrapper",{
+            mouseWheel:true,
+            bounce:true,
+        });
+        myScroll.on("touchmove",function(e){
+           e.preventDefault();
+        });
+        myScroll.on("scrollStart",function(){
+            var up = move();
+            if (myScroll.y == 0) {
+                up();
+            }
+        });
+
+        function move() {
+            var num=0;
+            return function () {
+                var flag = true;
+                    num++;
+                    if (!flag) {
+                        return false;
+                    }
+                    flag = false;
+                    var topele = $(".topele");
+                    topele.css("display", "block");
+                    $.ajax({
+                        type: "post",
+                        url: "/ajax/",
+                        data: {cid: cid, num: num},
+                        success: function (e) {
+                            for (var i = 0; i < e.length; i++) {
+                                $(`<li>
+                <div class="content">
+                    <a href="/show/${e[i].id}" class="title"><span>${e[i].atitle}</span></a>
+
+                </div>
+                <div class="content-img">
+                    <img src="/static/img/${e[i].aimg.split(";")[0]}" alt="">
+                </div>
+            </li>`).prependTo(".scroll-box");
+                                setTimeout(function () {
+                                    $(".topele").fadeOut();
+                                    myScroll.refresh();
+                                    flag = true;
+                                }, 500)
+                            }
+                        }
+                    })
+            }
+        }
+
+
+
+        var flag1=true;
+        $(".icon").eq(2).click(function(){
+            $(".shade").css({
+                left:0,
+                opacity:0.6
+            });
+            $(".side-nav").css("left",0);
+
+            if(!flag1){
+                return;
+            }
+            $.ajax({
+                url:"/express",
+                type:"post",
+                data:{url:"http://www.expressjs.com.cn/"},
+                success:function(e){
+                    var arr=e.split("|");
+                    for(var i=0;i<arr.length;i++){
+                        $(`<li><a href="##">${arr[i]}</a></li>`).appendTo(".side-nav ul")
+                    }
+                }
+            })
+        });
+        $(".shade").click(function(){
+            flag1=false;
+            $(".shade").css({
+                left:"-100%",
+                opacity:0
+            });
+            $(".side-nav").css("left","-80%");
+        });
+
+
+    };
+
+</script>
+</html>

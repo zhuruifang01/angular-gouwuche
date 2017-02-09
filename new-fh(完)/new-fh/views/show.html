@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="x5-orientation" content="portrait"/>
+    <meta name="screen-orientation" content="portrait"/>
+    <meta name="x5-fullscreen" content="true"/>
+    <meta name="full-screen" content="yes"/>
+    <title></title>
+    <link rel="stylesheet" href="/static/css/icon/iconfont.css">
+    <link rel="stylesheet" href="/static/css/show.css" />
+    <script src="/static/js/jquery-3.1.0.js"></script>
+    <script src="/static/js/public.js"></script>
+</head>
+<body>
+<div class="header">
+    <div class="ret">&lt;</div>
+    <!--<div class="nav-btn">-->
+        <!--<div class="nav-btn-lis"></div>-->
+        <!--<div class="nav-btn-lis"></div>-->
+        <!--<div class="nav-btn-lis"></div>-->
+    <!--</div>-->
+</div>
+<div class="title">
+    <h2><%=shows[0].atitle%></h2>
+    <div class="from-g">
+        <!--<div class="g-left">-->
+            <!--<a href=""></a>-->
+            <!--<div class="origin-time">-->
+                <!--<b>科技浪尖</b><br>-->
+                <!--<span>10-18 09:15</span>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="g-right">-->
+            <!--<input type="button" name="concern" value="+ 关注"/>-->
+        <!--</div>-->
+    </div>
+    <div class="details">
+        <img src="/static/img/<%=shows[0].aimg.split(";")[0]%>" alt="">
+        <%=shows[0].acon%>
+    </div>
+
+    <div class="liuyan-box">
+        留言板
+        <!--<a href="/liuyan/liuyanlist" class="more">查看更多</a>-->
+        <div class="liuyan-list">
+            <%for (var i=0;i<liuyan.length;i++){%>
+            <div class="liuyan-content">
+                <p><%=liuyan[i].con%></p>
+                <p class="zuozhe">
+                    <i><%=liuyan[i].lname%></i><span><%=liuyan[i].time%></span>
+                </p>
+            </div>
+            <%}%>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <i class="message">写评论...</i>
+    <!--<i class="iconfont icon-atmaway cute"></i>-->
+    <!--<i class="iconfont icon-favorite cute"></i>-->
+    <!--<i class="iconfont icon-share cute"></i>-->
+</div>
+<div class="liuyan-mask"></div>
+<div id="message">
+    <textarea name="liuyan" id="" cols="30" rows="5" placeholder="欢迎留言..."></textarea>
+    <button class="sub-btn">确定</button>
+</div>
+</body>
+<script>
+    window.onload=function(){
+        resize(750);
+        $(".ret").click(function(){
+           history.go(-1);
+        });
+        var flag=true;
+        $(".message").click(function(){
+            if(flag) {
+                $("#message").css("animation", "liuyan 1s linear forwards");
+                $(".liuyan-mask").css("display","block");
+                flag=false;
+            }
+        })
+        $(".liuyan-mask").click(function(){
+            if(!flag){
+                $("#message").css("animation","liuyan1 1s linear forwards");
+                $(this).css("display","none");
+                flag=true;
+            }
+        });
+
+
+        $(".sub-btn").click(function(){
+                var con = $("#message textarea").val();
+                var aid = location.pathname.slice(location.pathname.lastIndexOf("/") + 1);
+                var data = new Date();
+                var year = data.getFullYear();
+                var mouth = data.getMonth() + 1;
+                var day = data.getDate();
+                var hour = data.getHours();
+                var min = data.getMinutes();
+                var time = year + "-" + mouth + "-" + day + " " + hour + ":" + min;
+                $.ajax({
+                    url: "/liuyan/ajax",
+                    type: "post",
+                    data: {con: con, aid: aid,time:time},
+                    success: function (e) {
+                        if (e == "no") {
+                            alert("请先登录！");
+                            location.href="/user/login";
+                        }else{
+                            var username=e;
+                            flag=true;
+                            $("#message").css("animation","liuyan1 1s linear forwards");
+                            $(".liuyan-mask").css("display","none");
+                            $(`<div class="liuyan-content">
+            <p>${con}</p>
+            <p class="zuozhe">
+                <i>${username}</i><span>${time}</span>
+            </p>
+        </div>`).prependTo(".liuyan-list");
+                        }
+                    }
+                })
+        })
+
+    }
+</script>
+
+</html>
